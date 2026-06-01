@@ -20,7 +20,7 @@ for process in processes:
    process["turnaround_time"] = process["current_time"] - process["arrival"]
    process["waiting_time"]  = process["turnaround_time"] - process["burst"]
 
-print(f"{'Process ID':<10} {'Current Time':<10} {'Turnaround Time':<10} {'Waiting Time':<10}")
+print(f"{'Process ID':<10} {'Arrival Time':<10} {'Burst Time':<10} {'Current Time':<10} {'Turnaround Time':<10} {'Waiting Time':<10}")
 
 for process in processes:
-    print(f"{process['process_id']:<13}  {process['current_time']:<13}  {process['turnaround_time']:<13}  {process['waiting_time']:<13}") 
+    print(f"{process['process_id']:<13} {process['arrival']:<13} {process['burst']:<13} {process['current_time']:<13}  {process['turnaround_time']:<13}  {process['waiting_time']:<13}") 
