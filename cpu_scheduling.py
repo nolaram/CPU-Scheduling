@@ -1,8 +1,7 @@
 # Hello Ninjas
 
 # First Come First Serve (FCFS) Scheduling Algorithm
-
-processes = [{"pid": "P1", "arrival": 0, "burst": 5}, {"pid": "P2", "arrival": 2, "burst": 3},]
+processes = [{"process_id": "P1", "arrival": 0, "burst": 5}, {"process_id": "P2", "arrival": 2, "burst": 3},]
 
 current_time = 0
 
@@ -12,9 +11,9 @@ for process in processes:
 
    current_time += process["burst"]
   
-   process["ct"]  = current_time
-   process["tat"] = process["ct"] - process["arrival"]
-   process["wt"]  = process["tat"] - process["burst"]
+   process["current_time"]  = current_time
+   process["turnaround_time"] = process["current_time"] - process["arrival"]
+   process["waiting_time"]  = process["turnaround_time"] - process["burst"]
 
 for process in processes:
-    print(f"{process['pid']}  CT={process['ct']}  TAT={process['tat']}  WT={process['wt']}") 
+    print(f"{process['process_id']}  CT={process['current_time']}  TAT={process['turnaround_time']}  WT={process['waiting_time']}") 
