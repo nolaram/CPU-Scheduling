@@ -23,4 +23,4 @@ for process in processes:
 print(f"{'Process ID':<10} {'Current Time':<10} {'Turnaround Time':<10} {'Waiting Time':<10}")
 
 for process in processes:
-    print(f"{process['process_id']:<10}  CT={process['current_time']:<10}  TAT={process['turnaround_time']:<10}  WT={process['waiting_time']:<10}") 
+    print(f"{process['process_id']:<13}  {process['current_time']:<13}  {process['turnaround_time']:<13}  {process['waiting_time']:<13}") 
