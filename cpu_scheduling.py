@@ -2,14 +2,19 @@
 
 # First Come First Serve (FCFS) Scheduling Algorithm
 
-arrival = 0
-burst = 5
+processes = [{"pid": "P1", "arrival": 0, "burst": 5}, {"pid": "P2", "arrival": 2, "burst": 3},]
+
 current_time = 0
 
-current_time += burst
-completion = current_time
+for process in processes:
+   if current_time < process["arrival"]:
+        current_time = process["arrival"]
 
-turnaround_time = completion - arrival
-waiting_time = turnaround_time - burst
+   current_time += process["burst"]
+  
+   process["ct"]  = current_time
+   process["tat"] = process["ct"] - process["arrival"]
+   process["wt"]  = process["tat"] - process["burst"]
 
-print(f"CT={completion}, TAT={turnaround_time}, WT={waiting_time}")
+for process in processes:
+    print(f"{process['pid']}  CT={process['ct']}  TAT={process['tat']}  WT={process['wt']}") 
