@@ -20,13 +20,13 @@ for i in range(number_of_processes):
     processes.append({"process_id": process_id, 
                       "arrival": arrival_time, 
                       "burst": burst_time,
+                      "remaining": burst_time,
                       "finish_time": 0,
                       "turnaround_time": 0,
                       "waiting_time": 0,})
     print()
 
 # First Come First Serve (FCFS) Scheduling Algorithm
-
 if choice == "1":
     print("First Come First Serve (FCFS) Scheduling Algorithm")
     
@@ -49,6 +49,33 @@ if choice == "1":
 
     result = processes
 
+# Non-Preemptive Shortest Job First (SJF) Scheduling Algorithm
+elif choice == "2":
+     print("Non-Preemptive Shortest Job First (SJF) Scheduling Algorithm")
+
+     current_time = 0
+     gantt_chart = []
+     result = []
+     remaining_processes = processes[:]
+
+     while remaining_processes:
+          available_processes = [process for process in remaining_processes if process["arrival"] <= current_time]
+          if not available_processes:
+               next_arrival = min(process["arrival"] for process in remaining_processes)
+               gantt_chart.append(("Idle", current_time, next_arrival))
+               current_time = next_arrival
+               available_processes = [process for process in remaining_processes if process["arrival"] <= current_time]
+
+          process = min(available_processes, key=lambda x: (x["burst"], x["arrival"]))
+          remaining_processes.remove(process)
+          start_time = current_time
+          current_time += process["burst"]
+          gantt_chart.append((process["process_id"], start_time, current_time))
+          process["finish_time"]  = current_time
+          process["turnaround_time"] = process["finish_time"] - process["arrival"]
+          process["waiting_time"]  = process["turnaround_time"] - process["burst"]
+          result.append(process)
+
 # Print Gantt Chart
 if gantt_chart:
     print("\nGantt Chart:")
@@ -68,7 +95,6 @@ if gantt_chart:
     print(times)
     
 # Computing Average Waiting Time and Average Turnaround Time     
-
 if result:
     print(f"\n{'Process ID':<18}{'Arrival Time':<18}{'Burst Time':<18}{'Waiting Time':<18}{'Turnaround Time':<18}")
     print("-" * 90)
