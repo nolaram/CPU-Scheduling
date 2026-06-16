@@ -12,41 +12,48 @@ choice = input("Enter your desired CPU Scheduling Algorithm (1-2): ").strip()
 print()
 number_of_processes = int(input("Enter the number of processes: "))
 
+processes = []
+for i in range(number_of_processes):
+    process_id = input(f"Enter Process ID for Process {i + 1}: ")
+    arrival_time = int(input(f"Enter Arrival Time for Process {process_id}: "))
+    burst_time = int(input(f"Enter Burst Time for Process {process_id}: "))
+    processes.append({"process_id": process_id, "arrival": arrival_time, "burst": burst_time})
+    print()
 
 # First Come First Serve (FCFS) Scheduling Algorithm
 
 if choice == "1":
-
-    processes = [{"process_id": "P1", "arrival": 0, "burst": 5}, 
-                {"process_id": "P2", "arrival": 2, "burst": 3},
-                {"process_id": "P3", "arrival": 4, "burst": 1},
-                {"process_id": "P4", "arrival": 6, "burst": 2},
-                {"process_id": "P5", "arrival": 8, "burst": 4}
-                ]
+    print("First Come First Serve (FCFS) Scheduling Algorithm")
+    
+    processes.sort(key=lambda x: x["arrival"])  # Sort processes by arrival time
 
     current_time = 0
 
     for process in processes:
         if current_time < process["arrival"]:
                 current_time = process["arrival"]
-
+    
         current_time += process["burst"]
         
         process["current_time"]  = current_time
         process["turnaround_time"] = process["current_time"] - process["arrival"]
         process["waiting_time"]  = process["turnaround_time"] - process["burst"]
 
-    print(f"{'Process ID':<10} {'Arrival Time':<10} {'Burst Time':<10} {'Current Time':<10} {'Turnaround Time':<10} {'Waiting Time':<10}")
-    print("-" * 75)
-    for process in processes:
-        print(f"{process['process_id']:<13} {process['arrival']:<13} {process['burst']:<13} {process['current_time']:<13}  {process['turnaround_time']:<13}  {process['waiting_time']:<13}") 
+    result = processes
 
-    # Compute for Average Waiting Time and Average Turnaround Time
-    total_processes = len(processes)
-    average_turnaround_time = sum(process["turnaround_time"] for process in processes) / total_processes
-    average_waiting_time = sum(process["waiting_time"] for process in processes) / total_processes
-    print(f"\nAverage Turnaround Time: {average_turnaround_time}")
-    print(f"Average Waiting Time: {average_waiting_time}")  
+# Computing Average Waiting Time and Average Turnaround Time     
 
-# Non-Preemptive Shortest Job First (SJF) Scheduling Algorithm
+if result:
+    print(f"\n{'Process ID':<18}{'Arrival Time':<18}{'Burst Time':<18}{'Waiting Time':<18}{'Turnaround Time':<18}")
+    print("-" * 90)
+    for process in result:
+        print(f"{process['process_id']:<18}{process['arrival']:<18}{process['burst']:<18}{process['waiting_time']:<18}{process['turnaround_time']:<18}")
+
+    total = len(result)
+    average_waiting_time = sum(p["waiting_time"] for p in result) / total
+    average_turnaround_time = sum(p["turnaround_time"] for p in result) / total
+
+    print(f"\nAverage Waiting Time: {average_waiting_time:.2f}")
+    print(f"Average Turnaround Time: {average_turnaround_time:.2f}")
+     
 
