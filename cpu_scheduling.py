@@ -17,7 +17,12 @@ for i in range(number_of_processes):
     process_id = input(f"Enter Process ID for Process {i + 1}: ")
     arrival_time = int(input(f"Enter Arrival Time for Process {process_id}: "))
     burst_time = int(input(f"Enter Burst Time for Process {process_id}: "))
-    processes.append({"process_id": process_id, "arrival": arrival_time, "burst": burst_time})
+    processes.append({"process_id": process_id, 
+                      "arrival": arrival_time, 
+                      "burst": burst_time,
+                      "finish_time": 0,
+                      "turnaround_time": 0,
+                      "waiting_time": 0,})
     print()
 
 # First Come First Serve (FCFS) Scheduling Algorithm
@@ -31,12 +36,14 @@ if choice == "1":
 
     for process in processes:
         if current_time < process["arrival"]:
+                gantt_chart = f"Idle from {current_time} to {process['arrival']}"
                 current_time = process["arrival"]
-    
+        start_time = current_time
         current_time += process["burst"]
+        gantt_chart.append((process["process_id"], start_time, current_time))
         
-        process["current_time"]  = current_time
-        process["turnaround_time"] = process["current_time"] - process["arrival"]
+        process["finish_time"]  = current_time
+        process["turnaround_time"] = process["finish_time"] - process["arrival"]
         process["waiting_time"]  = process["turnaround_time"] - process["burst"]
 
     result = processes
