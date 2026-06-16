@@ -50,6 +50,7 @@ if choice == "1":
     result = processes
 
 # Print Gantt Chart
+if gantt_chart:
     print("\nGantt Chart:")
     top =  "+"
     labels = "|"
