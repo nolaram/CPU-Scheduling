@@ -33,10 +33,11 @@ if choice == "1":
     processes.sort(key=lambda x: x["arrival"])  # Sort processes by arrival time
 
     current_time = 0
+    gantt_chart = []
 
     for process in processes:
         if current_time < process["arrival"]:
-                gantt_chart = f"Idle from {current_time} to {process['arrival']}"
+                gantt_chart.append(("Idle", current_time, process["arrival"]))
                 current_time = process["arrival"]
         start_time = current_time
         current_time += process["burst"]
@@ -48,6 +49,23 @@ if choice == "1":
 
     result = processes
 
+# Print Gantt Chart
+    print("\nGantt Chart:")
+    top =  "+"
+    labels = "|"
+    times = str(gantt_chart[0][1])
+
+    for label, start, end in gantt_chart:
+        width = end - start
+        top += "-" * width + "+"
+        labels += f"{label:^{width}}" + "|"
+        times += f"{end:>{width}}"
+
+    print(top)
+    print(labels)
+    print(top)
+    print(times)
+    
 # Computing Average Waiting Time and Average Turnaround Time     
 
 if result:
