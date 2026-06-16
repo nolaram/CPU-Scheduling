@@ -34,7 +34,6 @@ for i in range(number_of_processes):
                       "finish_time": 0,
                       "turnaround_time": 0,
                       "waiting_time": 0,})
-    print()
 
 # First Come First Serve (FCFS) Scheduling Algorithm
 if choice == "1":
@@ -217,6 +216,11 @@ elif choice == "5":
 
           if not remaining_processes:
                all_done = True
+
+else:
+     print("Invalid choice. Please run the program again and select a valid option (1-5).")
+     result = []
+     gantt_chart = []
 
 # Print Gantt Chart
 if gantt_chart:
