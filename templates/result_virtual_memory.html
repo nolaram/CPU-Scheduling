@@ -9,21 +9,39 @@
 <div class="result-section">
   <h2>Reference String</h2>
   <div class="reference-list">{{ reference_string | join(' ') }}</div>
+  <div class="status-row">
+    {% for status in events %}
+    <span class="status-pill {{ status }}">{{ status[0] | upper }}</span>
+    {% endfor %}
+  </div>
 </div>
 
 <div class="result-section">
   <h2>Frame Table</h2>
-  <div class="frame-table">
-    {% for frame_idx, frame_row in enumerate(frame_table, start=1) %}
-    <div class="frame-row">
-      <div class="frame-label">Frame {{ frame_idx }}</div>
-      <div class="frame-values">
-        {% for value in frame_row %}
-        <span class="frame-cell">{{ value if value is not none else '-' }}</span>
+  <table class="frame-history">
+    <thead>
+      <tr>
+        <th>Frame</th>
+        {% for ref in reference_string %}
+        <th>{{ ref }}</th>
         {% endfor %}
-      </div>
-    </div>
-    {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for frame_row in frame_table %}
+      <tr>
+        <td class="frame-name">Frame {{ loop.index }}</td>
+        {% for value in frame_row %}
+        <td class="frame-cell {{ 'filled' if value is not none else 'empty' }}">{{ value if value is not none else '' }}</td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="legend">
+    <span class="legend-item"><span class="legend-dot fault"></span> Page Fault</span>
+    <span class="legend-item"><span class="legend-dot hit"></span> Page Hit</span>
   </div>
 </div>
 

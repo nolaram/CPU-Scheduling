@@ -231,6 +231,100 @@ table {
   margin-top: 16px;
 }
 
+.frame-history {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+}
+
+.frame-history th,
+.frame-history td {
+  padding: 12px 10px;
+  border: 1px solid #e2e8f0;
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+.frame-history th {
+  background: #f3f4f6;
+  color: #475569;
+}
+
+.frame-history td.empty {
+  background: #ffffff;
+  color: #94a3b8;
+}
+
+.frame-history td.filled {
+  background: #2563eb;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.frame-name {
+  text-align: left;
+  font-weight: 700;
+  background: #f8fafc;
+}
+
+.status-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  font-weight: 700;
+  color: white;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+}
+
+.status-pill.hit {
+  background: #22c55e;
+}
+
+.status-pill.fault {
+  background: #ef4444;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #475569;
+  font-weight: 600;
+}
+
+.legend-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.legend-dot.hit {
+  background: #22c55e;
+}
+
+.legend-dot.fault {
+  background: #ef4444;
+}
+
 th,
 td {
   padding: 14px 12px;
