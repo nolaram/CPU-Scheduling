@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-title">
+  <h1>Mass Storage Result</h1>
+  <p>{{ algorithm }} scheduling from head {{ head }}</p>
+</section>
+
+<div class="result-section">
+  <h2>Request Queue</h2>
+  <div class="reference-list">{{ disk_queue | join(' ') }}</div>
+</div>
+
+<div class="result-section">
+  <h2>Disk Head Path</h2>
+  <div class="svg-chart-container">
+    <svg width="{{ svg_width }}" height="320" class="disk-svg" xmlns="http://www.w3.org/2000/svg">
+      <polyline points="{{ polyline_points }}" fill="none" stroke="#2563eb" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+
+      {% for p in points %}
+        <circle cx="{{ p.x }}" cy="{{ p.y }}" r="7" fill="#1f4e79" />
+        <text x="{{ p.x }}" y="{{ p.y - 12 }}" text-anchor="middle" fill="#111827" font-size="13">{{ p.label }}</text>
+      {% endfor %}
+    </svg>
+  </div>
+</div>
+
+<div class="stats-row">
+  <div class="stat-card">
+    <h3>Total Head Movement</h3>
+    <p>{{ total_movement }}</p>
+  </div>
+</div>
+
+<div class="actions">
+  <a class="button secondary" href="/mass-storage-management">Run Another Disk Scheduling</a>
+  <a class="button" href="/">Back Home</a>
+</div>
+{% endblock %}

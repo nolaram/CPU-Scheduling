@@ -182,6 +182,107 @@ def run_page_replacement(algorithm, references, frames_count):
         return counting_based_page_replacement(references, frames_count)
     return [], 0, 0, []
 
+
+def parse_disk_queue(text):
+    return [int(token) for token in text.strip().split() if token.strip()]
+
+
+def compute_disk_path(head, requests):
+    return [head] + requests
+
+
+def service_fcfs(head, requests):
+    return compute_disk_path(head, requests)
+
+
+def service_sstf(head, requests):
+    remaining = list(requests)
+    current = head
+    serviced = []
+    while remaining:
+        next_request = min(remaining, key=lambda r: abs(r - current))
+        serviced.append(next_request)
+        remaining.remove(next_request)
+        current = next_request
+    return compute_disk_path(head, serviced)
+
+
+def service_scan(head, requests):
+    requests_sorted = sorted(requests)
+    left = [r for r in requests_sorted if r < head]
+    right = [r for r in requests_sorted if r >= head]
+    if not right:
+        order = left[::-1]
+    else:
+        order = right + left[::-1]
+    return compute_disk_path(head, order)
+
+
+def service_cscan(head, requests):
+    requests_sorted = sorted(requests)
+    left = [r for r in requests_sorted if r < head]
+    right = [r for r in requests_sorted if r >= head]
+    if not right:
+        order = left[::-1]
+    else:
+        order = right + left
+    return compute_disk_path(head, order)
+
+
+def service_look(head, requests):
+    requests_sorted = sorted(requests)
+    left = [r for r in requests_sorted if r < head]
+    right = [r for r in requests_sorted if r >= head]
+    if not right:
+        order = left[::-1]
+    else:
+        order = right + left[::-1]
+    return compute_disk_path(head, order)
+
+
+def service_clook(head, requests):
+    requests_sorted = sorted(requests)
+    left = [r for r in requests_sorted if r < head]
+    right = [r for r in requests_sorted if r >= head]
+    if not right:
+        order = left[::-1]
+    else:
+        order = right + left
+    return compute_disk_path(head, order)
+
+
+def compute_head_movement(path):
+    return sum(abs(path[i] - path[i - 1]) for i in range(1, len(path)))
+
+
+def normalize_disk_points(path, width_per_point=110, height=190, margin=30):
+    min_val = min(path)
+    max_val = max(path)
+    value_range = max_val - min_val or 1
+    points = []
+    for idx, track in enumerate(path):
+        x = 40 + idx * width_per_point
+        y = margin + (max_val - track) / value_range * height
+        points.append({"x": x, "y": y, "label": track})
+    svg_width = 40 + len(path) * width_per_point
+    return points, svg_width, min_val, max_val
+
+
+def disk_schedule(algorithm, head, requests):
+    if algorithm == "FCFS":
+        return service_fcfs(head, requests)
+    if algorithm == "SSTF":
+        return service_sstf(head, requests)
+    if algorithm == "SCAN":
+        return service_scan(head, requests)
+    if algorithm == "C-SCAN":
+        return service_cscan(head, requests)
+    if algorithm == "LOOK":
+        return service_look(head, requests)
+    if algorithm == "C-LOOK":
+        return service_clook(head, requests)
+    return compute_disk_path(head, requests)
+
 ALGORITHM_LABELS = {
     "1": "First Come First Serve (FCFS)",
     "2": "Non-Preemptive Shortest Job First (SJF)",
@@ -404,9 +505,34 @@ def virtual_memory():
     return render_template("virtual_memory.html")
 
 
-@app.route("/mass-storage-management")
+@app.route("/mass-storage-management", methods=["GET", "POST"])
 def mass_storage_management():
-    return render_template("coming_soon.html", title="Mass Storage Management")
+    if request.method == "POST":
+        algorithm = request.form.get("disk_algorithm")
+        head = request.form.get("head", type=int)
+        disk_queue_text = request.form.get("disk_queue", "")
+        requests = parse_disk_queue(disk_queue_text)
+
+        path = disk_schedule(algorithm, head, requests)
+        total_movement = compute_head_movement(path)
+        points, svg_width, min_track, max_track = normalize_disk_points(path)
+        polyline_points = " ".join(f"{int(p['x'])},{int(p['y'])}" for p in points)
+
+        return render_template(
+            "result_mass_storage.html",
+            algorithm=algorithm,
+            head=head,
+            disk_queue=requests,
+            path=path,
+            total_movement=total_movement,
+            points=points,
+            polyline_points=polyline_points,
+            svg_width=svg_width,
+            min_track=min_track,
+            max_track=max_track,
+        )
+
+    return render_template("mass_storage_management.html")
 
 
 if __name__ == "__main__":
