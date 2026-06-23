@@ -9,8 +9,9 @@ print("2. Non-Preemptive Shortest Job First (SJF)")
 print("3. Preemptive Shortest Job First (SJF)")
 print("4. Non-Preemptive Priority Scheduling ")
 print("5. Preemptive Priority Scheduling")
+print("6. Round Robin (RR)")
 
-choice = input("Enter your desired CPU Scheduling Algorithm (1-5): ").strip()  
+choice = input("Enter your desired CPU Scheduling Algorithm (1-6): ").strip()  
 
 print()
 number_of_processes = int(input("Enter the number of processes: "))
@@ -217,8 +218,63 @@ elif choice == "5":
           if not remaining_processes:
                all_done = True
 
+# Round Robin (RR) Scheduling Algorithm
+elif choice == "6":
+     print("Round Robin (RR) Scheduling Algorithm")
+     time_quantum = int(input("Enter Time Quantum: "))
+
+     for process in processes:
+          process["remaining"] = process["burst"]
+
+     processes.sort(key=lambda x: x["arrival"])  # sort by arrival time
+
+     current_time = 0
+     gantt_chart = []
+     result = []
+     ready_queue = []
+     i = 0
+     n = len(processes)
+
+     if n > 0:
+          current_time = processes[0]["arrival"]
+
+     finished = 0
+     while finished < n:
+          # enqueue arrived processes
+          while i < n and processes[i]["arrival"] <= current_time:
+               ready_queue.append(processes[i])
+               i += 1
+
+          if not ready_queue:
+               # CPU idle until next arrival
+               next_arrival = processes[i]["arrival"]
+               gantt_chart.append(("Idle", current_time, next_arrival))
+               current_time = next_arrival
+               continue
+
+          process = ready_queue.pop(0)
+          exec_time = min(time_quantum, process["remaining"])
+          start_time = current_time
+          process["remaining"] -= exec_time
+          current_time += exec_time
+          gantt_chart.append((process["process_id"], start_time, current_time))
+
+          # enqueue any new arrivals that came during execution
+          while i < n and processes[i]["arrival"] <= current_time:
+               ready_queue.append(processes[i])
+               i += 1
+
+          if process["remaining"] == 0:
+               process["finish_time"] = current_time
+               process["turnaround_time"] = process["finish_time"] - process["arrival"]
+               process["waiting_time"] = process["turnaround_time"] - process["burst"]
+               result.append(process)
+               finished += 1
+          else:
+               ready_queue.append(process)
+
 else:
-     print("Invalid choice. Please run the program again and select a valid option (1-5).")
+     print("Invalid choice. Please run the program again and select a valid option (1-6).")
      result = []
      gantt_chart = []
 
