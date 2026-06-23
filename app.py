@@ -1,3 +1,4 @@
+from collections import defaultdict
 from flask import Flask, render_template, request
 from memory_management import (
     allocate_memory,
@@ -10,6 +11,176 @@ from memory_management import (
 )
 
 app = Flask(__name__)
+
+def parse_reference_string(text):
+    return [int(token) for token in text.strip().split() if token.strip()]
+
+
+def fifo_page_replacement(references, frames_count):
+    frames = [None] * frames_count
+    queue = []
+    history = []
+    hits = 0
+    faults = 0
+    events = []
+
+    for ref in references:
+        if ref in frames:
+            hits += 1
+            events.append("hit")
+        else:
+            faults += 1
+            events.append("fault")
+            if None in frames:
+                index = frames.index(None)
+            else:
+                index = queue.pop(0)
+            frames[index] = ref
+            queue.append(index)
+        history.append(frames.copy())
+
+    return history, faults, hits, events
+
+
+def optimal_page_replacement(references, frames_count):
+    frames = [None] * frames_count
+    history = []
+    hits = 0
+    faults = 0
+    events = []
+
+    for idx, ref in enumerate(references):
+        if ref in frames:
+            hits += 1
+            events.append("hit")
+        else:
+            faults += 1
+            events.append("fault")
+            if None in frames:
+                replace_index = frames.index(None)
+            else:
+                future = references[idx + 1 :]
+                future_distances = []
+                for page in frames:
+                    if page is None:
+                        future_distances.append(float("inf"))
+                    elif page in future:
+                        future_distances.append(future.index(page))
+                    else:
+                        future_distances.append(float("inf"))
+                replace_index = int(max(range(frames_count), key=lambda i: future_distances[i]))
+            frames[replace_index] = ref
+        history.append(frames.copy())
+
+    return history, faults, hits, events
+
+
+def lru_page_replacement(references, frames_count):
+    frames = [None] * frames_count
+    last_used = {}
+    history = []
+    hits = 0
+    faults = 0
+    events = []
+
+    for time, ref in enumerate(references):
+        if ref in frames:
+            hits += 1
+            events.append("hit")
+        else:
+            faults += 1
+            events.append("fault")
+            if None in frames:
+                replace_index = frames.index(None)
+            else:
+                victim = min(
+                    [page for page in frames if page is not None],
+                    key=lambda page: last_used.get(page, -1),
+                )
+                replace_index = frames.index(victim)
+            frames[replace_index] = ref
+        last_used[ref] = time
+        history.append(frames.copy())
+
+    return history, faults, hits, events
+
+
+def lfu_page_replacement(references, frames_count):
+    frames = [None] * frames_count
+    counts = defaultdict(int)
+    load_time = {}
+    history = []
+    hits = 0
+    faults = 0
+    events = []
+
+    for time, ref in enumerate(references):
+        counts[ref] += 1
+        if ref in frames:
+            hits += 1
+            events.append("hit")
+        else:
+            faults += 1
+            events.append("fault")
+            if None in frames:
+                replace_index = frames.index(None)
+            else:
+                victim = min(
+                    [page for page in frames if page is not None],
+                    key=lambda page: (counts[page], load_time.get(page, 0)),
+                )
+                replace_index = frames.index(victim)
+            frames[replace_index] = ref
+            load_time[ref] = time
+        history.append(frames.copy())
+
+    return history, faults, hits, events
+
+
+def counting_based_page_replacement(references, frames_count):
+    frames = [None] * frames_count
+    counts = defaultdict(int)
+    load_time = {}
+    history = []
+    hits = 0
+    faults = 0
+    events = []
+
+    for time, ref in enumerate(references):
+        counts[ref] += 1
+        if ref in frames:
+            hits += 1
+            events.append("hit")
+        else:
+            faults += 1
+            events.append("fault")
+            if None in frames:
+                replace_index = frames.index(None)
+            else:
+                victim = min(
+                    [page for page in frames if page is not None],
+                    key=lambda page: (counts[page], load_time.get(page, 0)),
+                )
+                replace_index = frames.index(victim)
+            frames[replace_index] = ref
+            load_time[ref] = time
+        history.append(frames.copy())
+
+    return history, faults, hits, events
+
+
+def run_page_replacement(algorithm, references, frames_count):
+    if algorithm == "FIFO":
+        return fifo_page_replacement(references, frames_count)
+    if algorithm == "Optimal":
+        return optimal_page_replacement(references, frames_count)
+    if algorithm == "LRU":
+        return lru_page_replacement(references, frames_count)
+    if algorithm == "LFU":
+        return lfu_page_replacement(references, frames_count)
+    if algorithm == "Counting":
+        return counting_based_page_replacement(references, frames_count)
+    return [], 0, 0, []
 
 ALGORITHM_LABELS = {
     "1": "First Come First Serve (FCFS)",
@@ -204,9 +375,33 @@ def memory_management():
     return render_template("memory_management.html")
 
 
-@app.route("/virtual-memory")
+@app.route("/virtual-memory", methods=["GET", "POST"])
 def virtual_memory():
-    return render_template("coming_soon.html", title="Virtual Memory")
+    if request.method == "POST":
+        algorithm = request.form.get("vm_algorithm")
+        reference_string = request.form.get("reference_string", "")
+        frames_count = request.form.get("frames", type=int)
+
+        references = parse_reference_string(reference_string)
+        history, faults, hits, events = run_page_replacement(algorithm, references, frames_count or 0)
+
+        frame_table = []
+        for frame_idx in range(frames_count or 0):
+            frame_row = [row[frame_idx] if frame_idx < len(row) else None for row in history]
+            frame_table.append(frame_row)
+
+        return render_template(
+            "result_virtual_memory.html",
+            algorithm=algorithm,
+            reference_string=references,
+            frames_count=frames_count,
+            frame_table=frame_table,
+            faults=faults,
+            hits=hits,
+            events=events,
+        )
+
+    return render_template("virtual_memory.html")
 
 
 @app.route("/mass-storage-management")

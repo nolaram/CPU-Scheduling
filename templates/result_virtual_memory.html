@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-title">
+  <h1>Virtual Memory Result</h1>
+  <p>{{ algorithm }} page replacement</p>
+</section>
+
+<div class="result-section">
+  <h2>Reference String</h2>
+  <div class="reference-list">{{ reference_string | join(' ') }}</div>
+</div>
+
+<div class="result-section">
+  <h2>Frame Table</h2>
+  <div class="frame-table">
+    {% for frame_idx, frame_row in enumerate(frame_table, start=1) %}
+    <div class="frame-row">
+      <div class="frame-label">Frame {{ frame_idx }}</div>
+      <div class="frame-values">
+        {% for value in frame_row %}
+        <span class="frame-cell">{{ value if value is not none else '-' }}</span>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<div class="stats-row">
+  <div class="stat-card">
+    <h3>Page Faults</h3>
+    <p>{{ faults }}</p>
+  </div>
+  <div class="stat-card">
+    <h3>Page Hits</h3>
+    <p>{{ hits }}</p>
+  </div>
+</div>
+
+<div class="actions">
+  <a class="button secondary" href="/virtual-memory">Run Another Virtual Memory Simulation</a>
+  <a class="button" href="/">Back Home</a>
+</div>
+{% endblock %}
