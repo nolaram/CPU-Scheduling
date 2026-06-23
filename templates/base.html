@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Operating Systems Simulator</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <a href="/" class="brand">Operating Systems</a>
+        <nav>
+          <a href="/cpu-scheduling">CPU Scheduling</a>
+          <a href="/memory-management">Memory Management</a>
+          <a href="/virtual-memory">Virtual Memory</a>
+          <a href="/mass-storage-management">Mass Storage</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+      <p>Built with Flask · CPU Scheduling and Memory Management</p>
+    </footer>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>

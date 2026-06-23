@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hero">
+  <h1>Operating Systems Simulator</h1>
+  <p>Explore scheduling and memory management visually in the browser.</p>
+</div>
+
+<div class="grid">
+  <a class="card" href="/cpu-scheduling">
+    <h2>CPU Scheduling</h2>
+    <p>Simulate FCFS, SJF, Priority, and Round Robin algorithms.</p>
+  </a>
+  <a class="card" href="/memory-management">
+    <h2>Memory Management</h2>
+    <p>Simulate Best Fit, First Fit, Next Fit, and Worst Fit with MVT.</p>
+  </a>
+  <a class="card disabled" href="#">
+    <h2>Virtual Memory</h2>
+    <p>Coming soon.</p>
+  </a>
+  <a class="card disabled" href="#">
+    <h2>Mass Storage</h2>
+    <p>Coming soon.</p>
+  </a>
+</div>
+{% endblock %}

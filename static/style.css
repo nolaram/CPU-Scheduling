@@ -1,0 +1,266 @@
+body {
+  margin: 0;
+  font-family: Inter, system-ui, sans-serif;
+  background: #f6f9fc;
+  color: #16213e;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.site-header {
+  background: #1f4e79;
+  color: white;
+  padding: 16px 0;
+}
+
+.site-header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.site-header a.brand {
+  color: white;
+  text-decoration: none;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.site-header nav a {
+  color: white;
+  text-decoration: none;
+  margin-left: 20px;
+  opacity: 0.9;
+}
+
+.site-header nav a:hover {
+  opacity: 1;
+}
+
+.hero {
+  text-align: center;
+  padding: 60px 0;
+}
+
+.hero h1 {
+  margin: 0;
+  font-size: 3rem;
+}
+
+.hero p {
+  color: #475569;
+  font-size: 1.05rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+  margin-top: 32px;
+}
+
+.card {
+  display: block;
+  padding: 28px;
+  background: white;
+  border-radius: 18px;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 22px 48px rgba(15, 23, 42, 0.12);
+}
+
+.card.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.page-title h1 {
+  margin-bottom: 8px;
+}
+
+.page-title p {
+  color: #475569;
+}
+
+.field-row,
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.field-row label {
+  flex: 0 0 170px;
+  font-weight: 600;
+}
+
+.field-row input,
+.field-row select {
+  flex: 1;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid #d1d5db;
+  background: white;
+}
+
+.process-section,
+.result-section {
+  margin-top: 24px;
+  padding: 24px;
+  background: white;
+  border-radius: 18px;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
+}
+
+.section-header h2 {
+  margin: 0;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 999px;
+  padding: 12px 22px;
+  background: #1f4e79;
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.button.secondary {
+  background: #e2e8f0;
+  color: #16213e;
+}
+
+.button:hover {
+  transform: translateY(-1px);
+}
+
+.process-item {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+  margin-bottom: 14px;
+  align-items: end;
+}
+
+.process-item input {
+  width: 100%;
+}
+
+.gantt-chart,
+.memory-map {
+  display: flex;
+  gap: 8px;
+  min-height: 80px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #f3f4f6;
+}
+
+.gantt-bar,
+.memory-block {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+  min-width: 40px;
+  color: white;
+  font-weight: 700;
+  position: relative;
+}
+
+.gantt-bar span,
+.memory-block span {
+  font-size: 0.9rem;
+}
+
+.gantt-bar {
+  background: linear-gradient(135deg, #1f4e79, #2563eb);
+}
+
+.memory-block {
+  background: linear-gradient(135deg, #0f766e, #14b8a6);
+  min-width: 60px;
+}
+
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.stat-card {
+  background: #f8fafc;
+  border-radius: 16px;
+  padding: 18px;
+  text-align: center;
+}
+
+.stat-card h3 {
+  margin: 0 0 8px;
+  font-size: 0.95rem;
+  color: #475569;
+}
+
+.stat-card p {
+  margin: 0;
+  font-size: 1.7rem;
+  font-weight: 700;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+}
+
+th,
+td {
+  padding: 14px 12px;
+  border-bottom: 1px solid #e2e8f0;
+  text-align: left;
+}
+
+th {
+  background: #f8fafc;
+  color: #111827;
+}
+
+.site-footer {
+  text-align: center;
+  padding: 20px 0;
+  color: #475569;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+@media (max-width: 720px) {
+  .field-row,
+  .section-header,
+  .stats-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

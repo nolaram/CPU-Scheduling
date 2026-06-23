@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-title">
+  <h1>Memory Management</h1>
+  <p>Enter memory and process values then select a placement strategy and scheduling algorithm.</p>
+</section>
+
+<form method="post" id="memory-form">
+  <div class="field-row">
+    <label for="total_memory">Total Memory Size</label>
+    <input type="number" name="total_memory" id="total_memory" min="1" required />
+  </div>
+
+  <div class="field-row">
+    <label for="strategy">Placement Strategy</label>
+    <select name="strategy" id="strategy" required>
+      <option value="1">First Fit</option>
+      <option value="2">Best Fit</option>
+      <option value="3">Next Fit</option>
+      <option value="4">Worst Fit</option>
+    </select>
+  </div>
+
+  <div class="field-row">
+    <label for="algorithm">CPU Scheduling Algorithm</label>
+    <select name="algorithm" id="algorithm" required>
+      <option value="1">FCFS</option>
+      <option value="2">SJF Non-Preemptive</option>
+      <option value="3">SJF Preemptive</option>
+      <option value="4">Priority Non-Preemptive</option>
+      <option value="5">Priority Preemptive</option>
+      <option value="6">Round Robin</option>
+    </select>
+  </div>
+
+  <div class="field-row" id="memory-quantum-row" style="display:none;">
+    <label for="quantum">Time Quantum</label>
+    <input type="number" name="quantum" id="quantum" min="1" value="2" />
+  </div>
+
+  <section class="process-section">
+    <div class="section-header">
+      <h2>Processes</h2>
+      <button type="button" class="button secondary" id="add-memory-process">Add Process</button>
+    </div>
+    <div id="memory-process-list"></div>
+  </section>
+
+  <button type="submit" class="button primary">Allocate Memory</button>
+</form>
+{% endblock %}
