@@ -6,10 +6,11 @@
     <title>Operating Systems</title>
     <link rel="stylesheet" href="/static/style.css" />
   </head>
-  <body>
+  <body class="{% block body_class %}{% endblock %}">
     <div id="splash" class="splash-overlay">
       <div class="splash-text">Operating Systems</div>
     </div>
+    <div id="site-background" class="site-background" aria-hidden="true"></div>
 
     <header class="site-header">
       <div class="container header-row">
@@ -33,9 +34,9 @@
       </div>
 
       <div id="site-menu" class="site-menu" aria-hidden="true">
-        <button class="site-menu-item" id="menu-tutorial">Tutorial</button>
-        <button class="site-menu-item" id="menu-collaborators">Collaborators</button>
-        <button class="site-menu-item" id="menu-about">About</button>
+        <button class="site-menu-item" id="menu-tutorial"><span class="menu-icon">🎥</span>Tutorial</button>
+        <button class="site-menu-item" id="menu-collaborators"><span class="menu-icon">👥</span>Collaborators</button>
+        <button class="site-menu-item" id="menu-about"><span class="menu-icon">ℹ️</span>About</button>
       </div>
     </header>
 

@@ -14,16 +14,37 @@ function addProcessRow(containerId, type) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Splash overlay: show on every index visit with fade-in + fade-out
   const splash = document.getElementById('splash');
-  if (splash) {
-    // trigger fade-in using CSS show class so splash-text also animates
-    requestAnimationFrame(() => splash.classList.add('show'));
+  const siteBackground = document.getElementById('site-background');
+  const slideshowImages = ['/static/img/1.jpg', '/static/img/2.jpg', '/static/img/3.jpg'];
+  const isHome = document.body.classList.contains('home-screen');
+  let slideshowIndex = 0;
 
-    // after fade-in (600ms) + visible duration (2000ms), remove show to fade out
+  function showNextBackground() {
+    if (!siteBackground) return;
+    siteBackground.classList.remove('visible');
+    setTimeout(() => {
+      siteBackground.style.backgroundImage = `url(${slideshowImages[slideshowIndex]})`;
+      siteBackground.classList.add('visible');
+      slideshowIndex = (slideshowIndex + 1) % slideshowImages.length;
+    }, 600);
+  }
+
+  if (isHome && siteBackground) {
+    siteBackground.style.backgroundImage = `url(${slideshowImages[0]})`;
+    requestAnimationFrame(() => siteBackground.classList.add('visible'));
+    setInterval(showNextBackground, 5000);
+  } else if (splash) {
+    splash.remove();
+  }
+
+  if (isHome && splash) {
+    requestAnimationFrame(() => splash.classList.add('show'));
     setTimeout(() => {
       splash.classList.remove('show');
-      splash.addEventListener('transitionend', () => splash.remove(), { once: true });
+      const removeSplash = () => splash.remove();
+      splash.addEventListener('transitionend', removeSplash, { once: true });
+      setTimeout(removeSplash, 900);
     }, 2600);
   }
   const addCpuBtn = document.getElementById('add-cpu-process');
