@@ -7,15 +7,35 @@
     <link rel="stylesheet" href="/static/style.css" />
   </head>
   <body>
+    <div id="splash" class="splash-overlay">
+      <div class="splash-text">Operating Systems</div>
+    </div>
+
     <header class="site-header">
-      <div class="container">
-        <a href="/" class="brand">Operating Systems</a>
-        <nav>
+      <div class="container header-row">
+        <div class="brand-row">
+          <img src="/static/img/logo.png" alt="logo" class="site-logo" />
+          <a href="/" class="brand">Operating Systems</a>
+        </div>
+
+        <nav class="main-nav">
           <a href="/cpu-scheduling">CPU Scheduling</a>
           <a href="/memory-management">Memory Management</a>
           <a href="/virtual-memory">Virtual Memory</a>
           <a href="/mass-storage-management">Mass Storage</a>
         </nav>
+
+        <button id="menu-button" class="menu-button" aria-expanded="false" aria-label="Open menu">
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+        </button>
+      </div>
+
+      <div id="site-menu" class="site-menu" aria-hidden="true">
+        <button class="site-menu-item" id="menu-tutorial">Tutorial</button>
+        <button class="site-menu-item" id="menu-collaborators">Collaborators</button>
+        <button class="site-menu-item" id="menu-about">About</button>
       </div>
     </header>
 

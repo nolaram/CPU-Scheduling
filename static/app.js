@@ -14,6 +14,25 @@ function addProcessRow(containerId, type) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Splash overlay: show on every index visit with fade-in + fade-out
+  const splash = document.getElementById('splash');
+  if (splash) {
+    // ensure visible and start from hidden state for fade-in
+    splash.classList.remove('hide');
+    splash.style.opacity = '0';
+    splash.style.visibility = 'visible';
+    // trigger fade-in
+    requestAnimationFrame(() => {
+      splash.style.transition = 'opacity 0.6s ease, visibility 0.6s ease';
+      splash.style.opacity = '1';
+    });
+
+    // after 2s visible, fade out and remove
+    setTimeout(() => {
+      splash.style.opacity = '0';
+      splash.addEventListener('transitionend', () => splash.remove(), { once: true });
+    }, 2000 + 600); // wait for fade-in to finish then show for ~2s
+  }
   const addCpuBtn = document.getElementById('add-cpu-process');
   const addMemoryBtn = document.getElementById('add-memory-process');
   const algorithmSelect = document.getElementById('algorithm');

@@ -5,6 +5,37 @@ body {
   color: #16213e;
 }
 
+/* Splash overlay shown on first visit */
+.splash-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #1f4e79;
+  color: white;
+  z-index: 9999;
+  pointer-events: all;
+  opacity: 0;
+  visibility: hidden;
+}
+.splash-overlay.show {
+  opacity: 1;
+  visibility: visible;
+}
+.splash-text {
+  font-size: 3.2rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  transform: translateY(8px);
+  opacity: 0;
+  transition: transform 0.6s ease, opacity 0.6s ease;
+}
+.splash-overlay.show .splash-text {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 .container {
   max-width: 1100px;
   margin: 0 auto;
