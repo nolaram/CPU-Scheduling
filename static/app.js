@@ -17,21 +17,14 @@ document.addEventListener('DOMContentLoaded', () => {
   // Splash overlay: show on every index visit with fade-in + fade-out
   const splash = document.getElementById('splash');
   if (splash) {
-    // ensure visible and start from hidden state for fade-in
-    splash.classList.remove('hide');
-    splash.style.opacity = '0';
-    splash.style.visibility = 'visible';
-    // trigger fade-in
-    requestAnimationFrame(() => {
-      splash.style.transition = 'opacity 0.6s ease, visibility 0.6s ease';
-      splash.style.opacity = '1';
-    });
+    // trigger fade-in using CSS show class so splash-text also animates
+    requestAnimationFrame(() => splash.classList.add('show'));
 
-    // after 2s visible, fade out and remove
+    // after fade-in (600ms) + visible duration (2000ms), remove show to fade out
     setTimeout(() => {
-      splash.style.opacity = '0';
+      splash.classList.remove('show');
       splash.addEventListener('transitionend', () => splash.remove(), { once: true });
-    }, 2000 + 600); // wait for fade-in to finish then show for ~2s
+    }, 2600);
   }
   const addCpuBtn = document.getElementById('add-cpu-process');
   const addMemoryBtn = document.getElementById('add-memory-process');
@@ -65,4 +58,66 @@ document.addEventListener('DOMContentLoaded', () => {
       event.target.closest('.process-item').remove();
     }
   });
+
+  // Menu + modal logic
+  const menuBtn = document.getElementById('menu-button');
+  const siteMenu = document.getElementById('site-menu');
+  const modalOverlay = document.getElementById('modal-overlay');
+  const modalContent = document.getElementById('modal-content');
+  const modalClose = document.getElementById('modal-close');
+
+  if (menuBtn && siteMenu) {
+    menuBtn.addEventListener('click', () => {
+      const open = siteMenu.classList.toggle('open');
+      menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      siteMenu.setAttribute('aria-hidden', open ? 'false' : 'true');
+    });
+    // close menu when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!siteMenu.contains(e.target) && !menuBtn.contains(e.target)) {
+        siteMenu.classList.remove('open');
+        menuBtn.setAttribute('aria-expanded', 'false');
+        siteMenu.setAttribute('aria-hidden', 'true');
+      }
+    });
+  }
+
+  function showModal(title, html) {
+    modalContent.innerHTML = `<h2>${title}</h2>` + html;
+    modalOverlay.classList.add('show');
+    modalOverlay.setAttribute('aria-hidden', 'false');
+  }
+
+  function hideModal(){
+    modalOverlay.classList.remove('show');
+    modalOverlay.setAttribute('aria-hidden', 'true');
+    const video = modalContent.querySelector('video');
+    if (video) { video.pause(); video.currentTime = 0; }
+  }
+
+  const tutorialBtn = document.getElementById('menu-tutorial');
+  const collabBtn = document.getElementById('menu-collaborators');
+  const aboutBtn = document.getElementById('menu-about');
+
+  if (tutorialBtn) {
+    tutorialBtn.addEventListener('click', () => {
+      siteMenu.classList.remove('open');
+      showModal('Tutorial', `<div class="video-placeholder"><video id="tutorial-video" controls style="width:100%"><source id="tutorial-source" src="" type="video/mp4">Your browser does not support the video tag.</video></div>`);
+    });
+  }
+  if (collabBtn) {
+    collabBtn.addEventListener('click', () => {
+      siteMenu.classList.remove('open');
+      showModal('Collaborators', `<ul><li>Renser Ivahn Gutierrez</li><li>Rafael Almanza</li><li>Matthew Tonogbanua</li><li>Marlon Copino</li></ul>`);
+    });
+  }
+  if (aboutBtn) {
+    aboutBtn.addEventListener('click', () => {
+      siteMenu.classList.remove('open');
+      showModal('About', `<p>A program built by 4 Computer Engineering Students in Polytechnic University of the Philippines that shows the different concepts in Operating Systems</p>`);
+    });
+  }
+
+  if (modalClose) modalClose.addEventListener('click', hideModal);
+  if (modalOverlay) modalOverlay.addEventListener('click', (e)=>{ if (e.target === modalOverlay) hideModal(); });
 });
