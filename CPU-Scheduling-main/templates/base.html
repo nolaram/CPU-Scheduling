@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Operating Systems</title>
+    <link rel="stylesheet" href="/static/style.css" />
+    
+  </head>
+  <body class="{% block body_class %}{% endblock %}">
+    <div id="splash" class="splash-overlay">
+      <div class="splash-text">Operating Systems</div>
+    </div>
+    <div id="site-background" class="site-background" aria-hidden="true"></div>
+
+    <header class="site-header">
+      <div class="container header-row">
+        <div class="brand-row">
+          <img src="/static/img/logo.png" alt="logo" class="site-logo" />
+          <a href="/" class="brand">Operating Systems</a>
+        </div>
+
+        <nav class="main-nav">
+          <a href="/cpu-scheduling">CPU Scheduling</a>
+          <a href="/memory-management">Memory Management</a>
+          <a href="/virtual-memory">Virtual Memory</a>
+          <a href="/mass-storage-management">Mass Storage</a>
+        </nav>
+
+        <button id="menu-button" class="menu-button" aria-expanded="false" aria-label="Open menu">
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+        </button>
+      </div>
+
+      <div id="site-menu" class="site-menu" aria-hidden="true">
+        <button class="site-menu-item" id="menu-tutorial"><span class="menu-icon">🎥</span>Tutorial</button>
+        <button class="site-menu-item" id="menu-collaborators"><span class="menu-icon">👥</span>Collaborators</button>
+        <button class="site-menu-item" id="menu-about"><span class="menu-icon">ℹ️</span>About</button>
+      </div>
+    </header>
+
+    <main class="container">
+      {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+      <p>Built By:
+        Renser Ivahn Gutierrez,
+        Rafael Almanza,
+        Matthew Tonogbanua,
+        Marlon Copino
+      </p>
+    </footer>
+
+    <div id="modal-overlay" class="modal-overlay" aria-hidden="true">
+      <div class="modal" role="dialog" aria-modal="true">
+        <button class="close" id="modal-close">✕</button>
+        <div id="modal-content">
+          <!-- populated by JS -->
+        </div>
+      </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>

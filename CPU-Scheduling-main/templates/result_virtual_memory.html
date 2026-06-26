@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-title">
+  <h1>Virtual Memory Result</h1>
+  <p>{{ algorithm }} page replacement</p>
+</section>
+
+<div class="result-section">
+  <h2>Reference String</h2>
+  <div class="reference-list">{{ reference_string | join(' ') }}</div>
+  <div class="status-row">
+    {% for status in events %}
+    <span class="status-pill {{ status }}">{{ status[0] | upper }}</span>
+    {% endfor %}
+  </div>
+</div>
+
+<div class="result-section">
+  <h2>Frame Table</h2>
+  <table class="frame-history">
+    <thead>
+      <tr>
+        <th>Frame</th>
+        {% for ref in reference_string %}
+        <th>{{ ref }}</th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for frame_row in frame_table %}
+      <tr>
+        <td class="frame-name">Frame {{ loop.index }}</td>
+        {% for value in frame_row %}
+        <td class="frame-cell {{ 'filled' if value is not none else 'empty' }}">{{ value if value is not none else '' }}</td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="legend">
+    <span class="legend-item"><span class="legend-dot fault"></span> Page Fault</span>
+    <span class="legend-item"><span class="legend-dot hit"></span> Page Hit</span>
+  </div>
+</div>
+
+<div class="stats-row">
+  <div class="stat-card">
+    <h3>Page Faults</h3>
+    <p>{{ faults }}</p>
+  </div>
+  <div class="stat-card">
+    <h3>Page Hits</h3>
+    <p>{{ hits }}</p>
+  </div>
+</div>
+
+<div class="actions">
+  <a class="button secondary" href="/virtual-memory">Run Another Virtual Memory Simulation</a>
+  <a class="button" href="/">Back Home</a>
+</div>
+{% endblock %}

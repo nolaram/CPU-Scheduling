@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block body_class %}home-screen{% endblock %}
+
+{% block content %}
+<div class="hero">
+  <h1>Operating Systems</h1>
+  <p>Explore different concepts in operating systems.</p>
+</div>
+
+<div class="grid">
+  <a class="card" href="/cpu-scheduling">
+    <h2>CPU Scheduling</h2>
+    <p>Simulate FCFS, SJF, Priority, and Round Robin algorithms.</p>
+  </a>
+  <a class="card" href="/memory-management">
+    <h2>Memory Management</h2>
+    <p>Simulate Best Fit, First Fit, Next Fit, and Worst Fit with MVT.</p>
+  </a>
+  <a class="card" href="/virtual-memory">
+    <h2>Virtual Memory</h2>
+    <p>Simulate page replacement algorithms with your own reference string.</p>
+  </a>
+  <a class="card" href="/mass-storage-management">
+    <h2>Mass Storage</h2>
+    <p>Simulate disk scheduling algorithms and head movement.</p>
+  </a>
+</div>
+{% endblock %}

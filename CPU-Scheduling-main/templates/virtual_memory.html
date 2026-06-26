@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-title">
+  <h1>Virtual Memory</h1>
+  <p>Choose a page replacement algorithm and enter your reference string.</p>
+</section>
+
+<form method="post" id="virtual-memory-form">
+  <div class="field-row">
+    <label for="vm_algorithm">Replacement Algorithm</label>
+    <select name="vm_algorithm" id="vm_algorithm" required>
+      <option value="FIFO">FIFO</option>
+      <option value="Optimal">Optimal</option>
+      <option value="LRU">LRU</option>
+      <option value="LFU">LFU</option>
+      <option value="Counting">Counting-Based</option>
+    </select>
+  </div>
+
+  <div class="field-row">
+    <label for="reference_string">Reference String</label>
+    <input
+    type="text"
+    name="reference_string"
+    id="reference_string"
+    placeholder="e.g. 4 5 6 7 8 9 10"
+    pattern="[0-9 ]+"
+    title="Only numbers and spaces are allowed"
+    oninput="this.value = this.value.replace(/[^0-9 ]/g, '')"
+    required
+/>
+  </div>
+
+  <div class="field-row">
+    <label for="frames">Number of Frames</label>
+    <input type="number" name="frames" id="frames" min="1" required />
+  </div>
+
+  <button type="submit" class="button primary">Run Replacement</button>
+</form>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-title">
+  <h1>Mass Storage Management</h1>
+  <p>Choose a disk scheduling algorithm and enter the disk request queue.</p>
+</section>
+
+<form method="post" id="mass-storage-form">
+  <div class="field-row">
+    <label for="disk_algorithm">Scheduling Algorithm</label>
+    <select name="disk_algorithm" id="disk_algorithm" required>
+      <option value="FCFS">FCFS Scheduling</option>
+      <option value="SSTF">SSTF Scheduling</option>
+      <option value="SCAN">SCAN Scheduling</option>
+      <option value="C-SCAN">C-SCAN Scheduling</option>
+      <option value="LOOK">LOOK Scheduling</option>
+      <option value="C-LOOK">C-LOOK Scheduling</option>
+    </select>
+  </div>
+
+  <div class="field-row">
+    <label for="head">Head Starting Track</label>
+    <input type="number" name="head" id="head" min="0" required />
+  </div>
+
+  <div class="field-row">
+    <label for="disk_queue">Disk Request Queue</label>
+    <input
+    type="text"
+    name="reference_string"
+    id="disk_queue"
+    placeholder="e.g. 98 183 37 122 14 124 65 67"
+    pattern="[0-9 ]+"
+    title="Only numbers and spaces are allowed"
+    oninput="this.value = this.value.replace(/[^0-9 ]/g, '')"
+    required
+/>
+  </div>
+
+  <button type="submit" class="button primary">Run Disk Scheduling</button>
+</form>
+{% endblock %}

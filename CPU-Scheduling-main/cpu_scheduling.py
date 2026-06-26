@@ -1,0 +1,313 @@
+# CPU Scheduling Algorithms
+# =========================
+
+print("CPU Scheduling Algorithms")
+print("-" * 25)
+print("Select a CPU Scheduling Algorithm:")
+print("1. First Come First Serve (FCFS)")
+print("2. Non-Preemptive Shortest Job First (SJF)")
+print("3. Preemptive Shortest Job First (SJF)")
+print("4. Non-Preemptive Priority Scheduling ")
+print("5. Preemptive Priority Scheduling")
+print("6. Round Robin (RR)")
+
+choice = input("Enter your desired CPU Scheduling Algorithm (1-6): ").strip()  
+
+print()
+number_of_processes = int(input("Enter the number of processes: "))
+
+processes = []
+for i in range(number_of_processes):
+    process_id = input(f"Enter Process ID for Process {i + 1}: ")
+    arrival_time = int(input(f"Enter Arrival Time for Process {process_id}: "))
+    burst_time = int(input(f"Enter Burst Time for Process {process_id}: "))
+
+    if choice in ("4", "5"):
+         priority = int(input(f"Enter Priority for Process {process_id} (lower number means higher priority): "))
+    else:
+         priority = 0
+
+    processes.append({"process_id": process_id, 
+                      "arrival": arrival_time, 
+                      "burst": burst_time,
+                      "remaining": burst_time,
+                      "priority": priority,
+                      "finish_time": 0,
+                      "turnaround_time": 0,
+                      "waiting_time": 0,})
+
+# First Come First Serve (FCFS) Scheduling Algorithm
+if choice == "1":
+    print("First Come First Serve (FCFS) Scheduling Algorithm")
+    
+    processes.sort(key=lambda x: x["arrival"])  # Sort processes by arrival time
+
+    current_time = 0
+    gantt_chart = []
+
+    for process in processes:
+        if current_time < process["arrival"]:
+                gantt_chart.append(("Idle", current_time, process["arrival"]))
+                current_time = process["arrival"]
+        start_time = current_time
+        current_time += process["burst"]
+        gantt_chart.append((process["process_id"], start_time, current_time))
+        
+        process["finish_time"]  = current_time
+        process["turnaround_time"] = process["finish_time"] - process["arrival"]
+        process["waiting_time"]  = process["turnaround_time"] - process["burst"]
+
+    result = processes
+
+# Non-Preemptive Shortest Job First (SJF) Scheduling Algorithm
+elif choice == "2":
+     print("Non-Preemptive Shortest Job First (SJF) Scheduling Algorithm")
+
+     current_time = 0
+     gantt_chart = []
+     result = []
+     remaining_processes = processes[:]
+
+     while remaining_processes:
+          available_processes = [process for process in remaining_processes if process["arrival"] <= current_time]
+          if not available_processes:
+               next_arrival = min(process["arrival"] for process in remaining_processes)
+               gantt_chart.append(("Idle", current_time, next_arrival))
+               current_time = next_arrival
+               available_processes = [process for process in remaining_processes if process["arrival"] <= current_time]
+
+          process = min(available_processes, key=lambda x: (x["burst"], x["arrival"]))
+          remaining_processes.remove(process)
+          start_time = current_time
+          current_time += process["burst"]
+          gantt_chart.append((process["process_id"], start_time, current_time))
+          process["finish_time"]  = current_time
+          process["turnaround_time"] = process["finish_time"] - process["arrival"]
+          process["waiting_time"]  = process["turnaround_time"] - process["burst"]
+          result.append(process)
+
+# Preemptive Shortest Job First (SJF) Scheduling Algorithm
+elif choice == "3":
+     print("Preemptive Shortest Job First (SJF) Scheduling Algorithm")
+
+     for process in processes:
+          process["remaining"] = process["burst"]
+
+     current_time = 0
+     gantt_chart = []
+     result = []
+     remaining_processes = processes[:]
+     last_process_id = None
+     gantt_chart_start_time = 0
+     
+     all_done = False
+     while not all_done:
+            available_processes = [process for process in remaining_processes if process["arrival"] <= current_time]
+            
+            if not available_processes:
+                next_arrival = min(process["arrival"] for process in remaining_processes)
+                if last_process_id is not None:
+                    gantt_chart.append((last_process_id, gantt_chart_start_time, current_time))
+                    last_process_id = None
+                gantt_chart.append(("Idle", current_time, next_arrival))
+                gantt_chart_start_time = next_arrival
+                current_time = next_arrival
+                continue
+
+            process = min(available_processes, key=lambda x: (x["remaining"], x["arrival"]))
+
+            if process["process_id"] != last_process_id:
+                if last_process_id is not None:
+                    gantt_chart.append((last_process_id, gantt_chart_start_time, current_time))
+                gantt_chart_start_time = current_time
+                last_process_id = process["process_id"]
+
+            process["remaining"] -= 1
+            current_time += 1
+
+            if process["remaining"] == 0:
+                 gantt_chart.append((process["process_id"], gantt_chart_start_time, current_time))
+                 last_process_id = None
+                 gantt_chart_start_time = current_time
+                 process["finish_time"]  = current_time
+                 process["turnaround_time"] = process["finish_time"] - process["arrival"]
+                 process["waiting_time"]  = process["turnaround_time"] - process["burst"]
+                 remaining_processes.remove(process)
+                 result.append(process)
+
+            if not remaining_processes:
+                 all_done = True
+
+# Non-Preemptive Priority Scheduling Algorithm
+elif choice == "4":
+     print("Non-Preemptive Priority Scheduling Algorithm")
+     print("Note: Lower number means higher priority")
+
+     current_time = 0
+     gantt_chart = []
+     result = []
+     remaining_processes = processes[:]
+
+     while remaining_processes:
+          available_processes = [process for process in remaining_processes if process["arrival"] <= current_time]
+          if not available_processes:
+               next_arrival = min(process["arrival"] for process in remaining_processes)
+               gantt_chart.append(("Idle", current_time, next_arrival))
+               current_time = next_arrival
+               available_processes = [process for process in remaining_processes if process["arrival"] <= current_time]
+
+          process = min(available_processes, key=lambda x: (x["priority"], x["arrival"]))
+          remaining_processes.remove(process)
+          start_time = current_time
+          current_time += process["burst"]
+          gantt_chart.append((process["process_id"], start_time, current_time))
+          process["finish_time"]  = current_time
+          process["turnaround_time"] = process["finish_time"] - process["arrival"]
+          process["waiting_time"]  = process["turnaround_time"] - process["burst"]
+          result.append(process)
+
+# Preemptive Priority Scheduling Algorithm
+elif choice == "5":
+     print("Preemptive Priority Scheduling Algorithm")
+     print("Note: Lower number means higher priority")
+
+     for process in processes:
+          process["remaining"] = process["burst"]
+
+     current_time = 0
+     gantt_chart = []
+     result = []
+     remaining_processes = processes[:]
+     last_process_id = None
+     gantt_chart_start_time = 0
+
+     all_done = False
+     while not all_done:
+          available_processes = [process for process in remaining_processes if process["arrival"] <= current_time]
+
+          if not available_processes:
+               next_arrival = min(process["arrival"] for process in remaining_processes)
+               if last_process_id is not None:
+                    gantt_chart.append((last_process_id, gantt_chart_start_time, current_time))
+                    last_process_id = None
+               gantt_chart.append(("Idle", current_time, next_arrival))
+               gantt_chart_start_time = next_arrival
+               current_time = next_arrival
+               continue
+          
+          process = min(available_processes, key=lambda x: (x["priority"], x["arrival"]))
+          if process["process_id"] != last_process_id:
+               if last_process_id is not None:
+                    gantt_chart.append((last_process_id, gantt_chart_start_time, current_time))
+               gantt_chart_start_time = current_time
+               last_process_id = process["process_id"]
+
+          process["remaining"] -= 1
+          current_time += 1
+
+          if process["remaining"] == 0:
+               gantt_chart.append((process["process_id"], gantt_chart_start_time, current_time))
+               last_process_id = None
+               gantt_chart_start_time = current_time
+               process["finish_time"]  = current_time
+               process["turnaround_time"] = process["finish_time"] - process["arrival"]
+               process["waiting_time"]  = process["turnaround_time"] - process["burst"]
+               remaining_processes.remove(process)
+               result.append(process)
+
+          if not remaining_processes:
+               all_done = True
+
+# Round Robin (RR) Scheduling Algorithm
+elif choice == "6":
+     print("Round Robin (RR) Scheduling Algorithm")
+     time_quantum = int(input("Enter Time Quantum: "))
+
+     for process in processes:
+          process["remaining"] = process["burst"]
+
+     processes.sort(key=lambda x: x["arrival"])  # sort by arrival time
+
+     current_time = 0
+     gantt_chart = []
+     result = []
+     ready_queue = []
+     i = 0
+     n = len(processes)
+
+     if n > 0:
+          current_time = processes[0]["arrival"]
+
+     finished = 0
+     while finished < n:
+          # enqueue arrived processes
+          while i < n and processes[i]["arrival"] <= current_time:
+               ready_queue.append(processes[i])
+               i += 1
+
+          if not ready_queue:
+               # CPU idle until next arrival
+               next_arrival = processes[i]["arrival"]
+               gantt_chart.append(("Idle", current_time, next_arrival))
+               current_time = next_arrival
+               continue
+
+          process = ready_queue.pop(0)
+          exec_time = min(time_quantum, process["remaining"])
+          start_time = current_time
+          process["remaining"] -= exec_time
+          current_time += exec_time
+          gantt_chart.append((process["process_id"], start_time, current_time))
+
+          # enqueue any new arrivals that came during execution
+          while i < n and processes[i]["arrival"] <= current_time:
+               ready_queue.append(processes[i])
+               i += 1
+
+          if process["remaining"] == 0:
+               process["finish_time"] = current_time
+               process["turnaround_time"] = process["finish_time"] - process["arrival"]
+               process["waiting_time"] = process["turnaround_time"] - process["burst"]
+               result.append(process)
+               finished += 1
+          else:
+               ready_queue.append(process)
+
+else:
+     print("Invalid choice. Please run the program again and select a valid option (1-6).")
+     result = []
+     gantt_chart = []
+
+# Print Gantt Chart
+if gantt_chart:
+    print("\nGantt Chart:")
+    top =  "+"
+    labels = "|"
+    times = str(gantt_chart[0][1])
+
+    for label, start, end in gantt_chart:
+        width = end - start
+        top += "-" * width + "+"
+        labels += f"{label:^{width}}" + "|"
+        times += f"{end:>{width}}"
+
+    print(top)
+    print(labels)
+    print(top)
+    print(times)
+    
+# Computing Average Waiting Time and Average Turnaround Time     
+if result:
+    print(f"\n{'Process ID':<18}{'Arrival Time':<18}{'Burst Time':<18}{'Waiting Time':<18}{'Turnaround Time':<18}")
+    print("-" * 90)
+    for process in result:
+        print(f"{process['process_id']:<18}{process['arrival']:<18}{process['burst']:<18}{process['waiting_time']:<18}{process['turnaround_time']:<18}")
+
+    total = len(result)
+    average_waiting_time = sum(p["waiting_time"] for p in result) / total
+    average_turnaround_time = sum(p["turnaround_time"] for p in result) / total
+
+    print(f"\nAverage Waiting Time: {average_waiting_time:.2f}")
+    print(f"Average Turnaround Time: {average_turnaround_time:.2f}")
+     
+
